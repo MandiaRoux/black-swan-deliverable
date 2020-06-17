@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
 import {Colors, Spacing} from "../../theme";
-import Search from "./Search";
 
 
 const Container = styled.div`
@@ -9,7 +8,7 @@ const Container = styled.div`
 	align-items: center;
 	
 	top:0;
-	background-color: ${Colors.secondary};
+	background-color: ${Colors.primary};
 	height: ${Spacing.menuHeight};
 	width: 100%;
 	z-index: 10;

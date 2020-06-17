@@ -27,6 +27,8 @@ const Content = styled.div`
 	overflow-y:hidden;
 	line-height: 1.2em;
 	
+	
+	
 	:after {
 		  content: "";
 		  text-align: right;
@@ -45,7 +47,7 @@ const IconRow = styled.div`
 	bottom:0;
 	left: 0;
 	right: 0;
-    font-size: 1.2rem;
+	
     justify-content: center;
     align-content: space-evenly;
     width: 100%;
@@ -61,27 +63,32 @@ const Link = styled.div`
 const IconLabel = styled.i`
 	margin: 3px;
     padding: .5rem;
+    
+    svg {
+    margin-right: .5rem;
+    }
 `
 
 
-const Card = ({title, description, url}) => {
+const Card = ({title, description, forks, stargazers, issues, expand}) => {
+	console.log(expand)
 	return (
 		<Container>
-			<Link>{url} -></Link>
+			<button onClick={expand}>EXPAND</button>
 			<Title>{title}</Title>
 			<Content>{description}</Content>
 			<IconRow>
 				<IconLabel>
 					<FontAwesomeIcon icon={faCodeBranch}/>
-				
+					{forks}
 				</IconLabel>
 				<IconLabel>
 					<FontAwesomeIcon icon={faStar}/>
-				
+					{stargazers}
 				</IconLabel>
 				<IconLabel>
 					<FontAwesomeIcon icon={faExclamationCircle}/>
-				
+					{issues}
 				</IconLabel>
 			</IconRow>
 		</Container>

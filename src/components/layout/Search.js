@@ -10,12 +10,8 @@ const Input = styled.input`
 	background-color: ${Colors.background};
 	min-width: 50%;
 	border-radius: 5px;
-    border-bottom: 3px solid transparent;
     outline: none;
-    &:focus {
-          outline: none;
-          border-bottom: 3px solid ${Colors.primary};
-        }
+  
 `
 
 const Container = styled.div`

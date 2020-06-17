@@ -4,6 +4,7 @@ import {Card, TopMenuBar} from "./components"
 import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
+import Modal from 'react-modal';
 
 const Results = styled.div`
 	background-color: ${Colors.background};
@@ -23,8 +24,12 @@ const Title = styled.h1`
 `
 const Main = styled.div`
 	min-height: 100vh;
+	font-size:1.6rem;
+	color: ${Colors.textLight};
+
 	background-color: ${Colors.background};
 `
+Modal.setAppElement('#root')
 
 class App extends Component {
 	constructor(props) {
@@ -33,7 +38,9 @@ class App extends Component {
 		this.state = {
 			searchResults: [],
 			isLoading: false,
-			error: null
+			error: null,
+			modalOpen: false,
+			expandedRepo: {}
 		};
 	}
 	
@@ -54,14 +61,33 @@ class App extends Component {
 		;
 	}
 	
-	render() {
-		const {searchResults, isLoading, error} = this.state
+	
+	toggleModal = () => {
+		this.setState({modalOpen: !this.state.modalOpen})
+	}
+	
+	expandRepo = (query) => {
+		console.log(query)
+		this.setState({modalOpen:true, isLoading: true})
 		
+		fetch('https://api.github.com/repos/' + query)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong ...');
+				}
+			})
+			.then(data => this.setState({expandedRepo: data, isLoading: false}))
+			.catch(error => this.setState({error, isLoading: false}));
+		;
+	}
+	
+	render() {
+		const {searchResults, isLoading, error, expandedRepo} = this.state
+		console.log("EXP", this.state.expandedRepo)
 		if (error) {
 			return <p>{error.message}</p>;
-		}
-		if (isLoading) {
-			return <p>Loading ...</p>;
 		}
 		return (
 			<Main>
@@ -70,16 +96,43 @@ class App extends Component {
 					<Search debouncedSearch={this.search}/>
 				</TopMenuBar>
 				<Results>
-					{searchResults.map(function (repo, i) {
+					{/*<Card*/}
+					{/*	title={"repo.name"}*/}
+					{/*	description={"repo.description"}*/}
+					{/*	url={"repo.url"}*/}
+					{/*	forks={"69036"}*/}
+					{/*	stargazers={"14644"}*/}
+					{/*	issues={"338"}*/}
+					{/*	expand={() => this.expandRepo("openatx/uiautomator2")}/>*/}
+					
+					{isLoading && <p>Loading ...</p>}
+					{searchResults.map((repo, i) => {
 						return (
 							<Card key={i}
 								  title={repo.name}
 								  description={repo.description}
-							url={repo.url}/>
+								  url={repo.url}
+								  forks={repo.forks_count}
+								  stargazers={repo.stargazers_count}
+								  issues={repo.open_issues_count}
+								  expand={() => this.expandRepo(repo.full_name)}/>
 						)
 					})}
 				</Results>
-			
+				<Modal
+					isOpen={this.state.modalOpen}
+					contentLabel="Example Modal"
+				>
+					<Card
+						  title={expandedRepo.name}
+						  description={expandedRepo.description}
+						  url={expandedRepo.url}
+						  forks={expandedRepo.forks_count}
+						  stargazers={expandedRepo.stargazers_count}
+						  issues={expandedRepo.open_issues_count}
+						  />
+				
+				</Modal>
 			</Main>
 		);
 	}
