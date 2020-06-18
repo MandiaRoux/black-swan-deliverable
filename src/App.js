@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
+import {PieChart} from "react-minimal-pie-chart";
 
 const Results = styled.div`
 	background-color: ${Colors.background};
@@ -42,7 +43,9 @@ class App extends Component {
 			modalOpen: false,
 			modalLoading: false,
 			expandedRepo: {},
-			issueList: {}
+			openIssuesList: {},
+			closedIssuesList:{},
+			totalIssuesCount:0
 		};
 	}
 	
@@ -69,13 +72,12 @@ class App extends Component {
 	}
 	
 	expandRepo = (query) => {
-		this.setState({modalOpen: true, modalLoading: true})
-		
+		this.setState({modalOpen: true, modalLoading: true, closedTicketsLoading:true})
 		//The expanded view of a repo requires two different API calls - one for the additional info of the repo itself and one for the issue list of that repo.
 		// For performance reasons this is processed through a singular state change
 		Promise.all([
 			fetch('https://api.github.com/repos/' + query),
-			fetch('https://api.github.com/search/issues?q=' + query)
+			fetch('https://api.github.com/search/issues?q=repo:' + query + '+type:issue+state:open'),
 		])
 			// map responses into an array of response.json() to read their content
 			.then(responses =>
@@ -88,14 +90,25 @@ class App extends Component {
 			.then(data => this.setState(
 					{
 					expandedRepo: data[0],
-					issuesList:data[1].items,
+					openIssuesList:data[1],
 					modalLoading: false
 				}
-			))
+			));
+		
+		fetch('https://api.github.com/search/issues?q=repo:' + query + '+type:issue+state:closed')
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Something went wrong ...');
+				}
+			})
+				.then(data => this.setState({closedIssuesList:data}))
+				.catch(error => this.setState({error, closedTicketsLoading: false}));
 	}
 	
 	render() {
-		const {searchResults, isLoading, error, expandedRepo, modalLoading, issuesList} = this.state
+		const {searchResults, isLoading, error, expandedRepo, modalLoading, openIssuesList, closedIssuesList} = this.state
 		if (error) {
 			return <p>{error.message}</p>;
 		}
@@ -106,39 +119,6 @@ class App extends Component {
 					<Search debouncedSearch={this.search}/>
 				</TopMenuBar>
 				<Results>
-					<Card
-						title={"repo.name"}
-						description={"repo.description"}
-						url={"repo.url"}
-						forks={"69036"}
-						stargazers={"14644"}
-						issues={"338"}
-						expand={() => this.expandRepo("openatx/uiautomator2")}/>
-					<Card
-						title={"repo.name"}
-						description={"repo.description"}
-						url={"repo.url"}
-						forks={"69036"}
-						stargazers={"14644"}
-						issues={"338"}
-						expand={() => this.expandRepo("openatx/uiautomator2")}/>
-					<Card
-						title={"repo.name"}
-						description={"repo.description"}
-						url={"repo.url"}
-						forks={"69036"}
-						stargazers={"14644"}
-						issues={"338d3"}
-						expand={() => this.expandRepo("openatx/uiautomator2")}/>
-					<Card
-						title={"repo.name"}
-						description={"repo.description"}
-						url={"repo.url"}
-						forks={"69036"}
-						stargazers={"14644"}
-						issues={"33s82"}
-						expand={() => this.expandRepo("openatx/uiautomator2")}/>
-					
 					{isLoading && <p>Loading ...</p>}
 					{searchResults.map((repo, i) => {
 						return (
@@ -167,7 +147,9 @@ class App extends Component {
 							forkCount={expandedRepo.forks_count}
 							stargazerCount={expandedRepo.stargazers_count}
 							issueCount={expandedRepo.open_issues_count}
-							issueList={issuesList}
+							openIssuesList={openIssuesList}
+							closedIssuesList={closedIssuesList}
+							openIssuesCount={expandedRepo.open_issues_count}
 						/>
 					}
 				

@@ -71,7 +71,6 @@ const IconLabel = styled.i`
 
 
 const Card = ({title, description, forks, stargazers, issues, expand}) => {
-	console.log(expand)
 	return (
 		<Container>
 			<button onClick={expand}>EXPAND</button>

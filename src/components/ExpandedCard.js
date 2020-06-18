@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {Colors} from "../theme";
 import {PieChart} from "./"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCodeBranch, faExclamationCircle, faStar, faArrowRight, faChartPie} from '@fortawesome/free-solid-svg-icons'
+import {faArrowRight, faChartPie, faCodeBranch, faExclamationCircle, faStar} from '@fortawesome/free-solid-svg-icons'
 
 const Container = styled.div`
 	background-color: ${Colors.primary};
@@ -107,8 +107,7 @@ const ActionBar = styled.div`
 `
 
 const IssueList = styled.div`
-
-padding-bottom: 2rem;
+	padding-bottom: 2rem;
 `
 const Issue = styled.div`
 
@@ -122,8 +121,16 @@ const Issue = styled.div`
 `
 
 
-const ExpandedCard = ({title, description, url, forkCount, stargazerCount, issueCount, issueList}) => {
+const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
 	const [showPieChart, updateShowPieChart] = React.useState(false);
+	const [closedIssueFilter, updateClosedIssueFilter] = React.useState(false);
+	const openIssueCount = openIssuesList.total_count
+	const closedIssueCount = closedIssuesList.total_count
+	const totalIssueCount = closedIssueCount + openIssueCount
+	
+	
+	console.log(openIssueCount)
+	console.log(closedIssuesList.length)
 	return (
 		<Container>
 			<Link>
@@ -138,12 +145,15 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, issue
 				<button onClick={() => updateShowPieChart(true)}>
 					<FontAwesomeIcon size={"2x"} icon={faChartPie}/>
 				</button>
-				<h3>Issues</h3>
-				<span>Filter Toggle</span>
+				<h3>{closedIssueFilter ? "Closed" : "Open"} Issues</h3>
+				<button onClick={() => updateClosedIssueFilter(!closedIssueFilter)}>
+					Filter Toggle
+				</button>
 			</ActionBar>
-			{showPieChart ? <PieChart/> : <Issues>
-				<IssueList>
-					{issueList.map((issue, i) => {
+			
+			{showPieChart ? <PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/> : <Issues>
+				{closedIssueFilter ?
+					<IssueList>{closedIssuesList.items.map((issue, i) => {
 						return (
 							<Issue key={i}
 							>
@@ -151,7 +161,19 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, issue
 							</Issue>
 						)
 					})}
-				</IssueList>
+					</IssueList>
+					:
+					<IssueList>{openIssuesList.items.map((issue, i) => {
+						return (
+							<Issue key={i}
+							>
+								{issue.title}
+							</Issue>
+						)
+					})}
+					</IssueList>
+				}
+			
 			
 			</Issues>}
 			
@@ -166,7 +188,7 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, issue
 				</IconLabel>
 				<IconLabel>
 					<FontAwesomeIcon icon={faExclamationCircle}/>
-					{issueCount}
+					{openIssueCount}
 				</IconLabel>
 			</IconRow>
 		</Container>
