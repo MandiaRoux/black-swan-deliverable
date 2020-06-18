@@ -126,11 +126,7 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 	const [closedIssueFilter, updateClosedIssueFilter] = React.useState(false);
 	const openIssueCount = openIssuesList.total_count
 	const closedIssueCount = closedIssuesList.total_count
-	const totalIssueCount = closedIssueCount + openIssueCount
-	
-	
-	console.log(openIssueCount)
-	console.log(closedIssuesList.length)
+
 	return (
 		<Container>
 			<Link>
@@ -142,7 +138,7 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 			<Title>{title}</Title>
 			<Content>{description}</Content>
 			<ActionBar>
-				<button onClick={() => updateShowPieChart(true)}>
+				<button onClick={() => updateShowPieChart(!showPieChart)}>
 					<FontAwesomeIcon size={"2x"} icon={faChartPie}/>
 				</button>
 				<h3>{closedIssueFilter ? "Closed" : "Open"} Issues</h3>

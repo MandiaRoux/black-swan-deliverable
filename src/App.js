@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
-import {PieChart} from "react-minimal-pie-chart";
+import LoadingGif from "./assets/tenor.gif";
 
 const Results = styled.div`
 	background-color: ${Colors.background};
@@ -30,6 +30,11 @@ const Main = styled.div`
 
 	background-color: ${Colors.background};
 `
+
+const Loader = styled.img`
+
+`
+
 Modal.setAppElement('#root')
 
 class App extends Component {
@@ -119,7 +124,7 @@ class App extends Component {
 					<Search debouncedSearch={this.search}/>
 				</TopMenuBar>
 				<Results>
-					{isLoading && <p>Loading ...</p>}
+					{!isLoading && <Loader alt={"loading"} src={LoadingGif}/>}
 					{searchResults.map((repo, i) => {
 						return (
 							<Card key={i}
@@ -128,7 +133,7 @@ class App extends Component {
 								  url={repo.url}
 								  forks={repo.forks_count}
 								  stargazers={repo.stargazers_count}
-								  issue={repo.open_issues_count}
+								  issues={repo.open_issues_count}
 								  expand={() => this.expandRepo(repo.full_name)}/>
 						)
 					})}

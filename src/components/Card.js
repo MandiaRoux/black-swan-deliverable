@@ -2,10 +2,12 @@ import React from 'react';
 import styled from "styled-components";
 import {Colors} from "../theme";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCodeBranch, faExclamationCircle, faStar, } from '@fortawesome/free-solid-svg-icons'
+import {faCodeBranch, faExclamationCircle, faStar, faExpandArrowsAlt} from '@fortawesome/free-solid-svg-icons'
 
 const Title = styled.h3`
-
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 95%;
 `
 
 const Container = styled.div`
@@ -17,6 +19,15 @@ const Container = styled.div`
 	
 	display: flex;
 	flex-direction: column;
+	cursor: pointer;
+	
+	transition: all .3s;
+	transform: translateY(0);
+	box-shadow: none;
+	&:hover {
+		transform: translateY(-10px);
+		box-shadow: 1px 7px 8px ${Colors.primaryDarker};
+	}
 `
 
 const Content = styled.div`
@@ -24,9 +35,9 @@ const Content = styled.div`
 	padding: 1rem 0;
 	margin-bottom: 1rem;
 	position: relative;
-	overflow-y:hidden;
+	overflow:hidden;
+	text-overflow: ellipsis;
 	line-height: 1.2em;
-	
 	
 	
 	:after {
@@ -69,12 +80,22 @@ const IconLabel = styled.i`
     }
 `
 
+const Icon = styled(FontAwesomeIcon)`
+	position: absolute;
+	top:1rem;
+	right:1rem;
+	transition: all .3s;
+	
+	${Container}:hover & {
+    	transform: scale(1.2);
+  	}
+`
 
 const Card = ({title, description, forks, stargazers, issues, expand}) => {
 	return (
-		<Container>
-			<button onClick={expand}>EXPAND</button>
+		<Container onClick={expand}>
 			<Title>{title}</Title>
+			<Icon icon={faExpandArrowsAlt}/>
 			<Content>{description}</Content>
 			<IconRow>
 				<IconLabel>

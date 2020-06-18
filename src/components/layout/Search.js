@@ -21,15 +21,12 @@ const Container = styled.div`
 
 const Search = ({debouncedSearch}) => {
 	const [input, setInput] = React.useState('');
-	const [debouncedInput] = useDebounce(input, 1000);
+	const [debouncedInput] = useDebounce(input, 500);
 	
 	React.useEffect(
 		() => {
 			if (debouncedInput) {
-				console.log("DEB SEARCH")
 				debouncedSearch(debouncedInput);
-			} else {
-				console.log("DEB NO")
 			}
 		},
 		[debouncedInput]
