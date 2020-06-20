@@ -1,8 +1,8 @@
 import TopMenuBar from "./layout/TopMenuBar";
-import Card from "./Card";
+import Card from "./basic/Card";
 import ExpandedCard from "./ExpandedCard";
-import PieChart from "./PieChart";
-import Helper from "./Helper";
+import PieChart from "./basic/PieChart";
+import Helper from "./basic/Helper";
 
 
 export {TopMenuBar, Card, ExpandedCard, PieChart, Helper}

@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
-import Loader from "./components/Loader";
+import Loader from "./components/basic/Loader";
 
 const Results = styled.div`
 	background-color: ${Colors.background};

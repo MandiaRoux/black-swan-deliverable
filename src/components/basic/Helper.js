@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import {Colors} from "../theme";
-import HelperImage from "../assets/code_inspction.svg";
+import {Colors} from "../../theme";
+import HelperImage from "../../assets/code_inspction.svg";
 
 const Container = styled.div`
 	padding: 3rem 1rem;

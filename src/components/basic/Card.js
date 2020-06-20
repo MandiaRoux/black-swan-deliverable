@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from "styled-components";
-import {Colors} from "../theme";
+import {Colors} from "../../theme";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCodeBranch, faExclamationCircle, faStar, faExpandArrowsAlt} from '@fortawesome/free-solid-svg-icons'
-import IconRow from "./IconRow";
+import IconRow from "../IconRow";
 
 const Title = styled.h3`
 	overflow: hidden;

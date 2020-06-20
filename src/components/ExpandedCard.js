@@ -51,15 +51,19 @@ const Title = styled.h3`
 const Content = styled.div`
 	grid-row: 3 / span 1;
 	grid-column: 1 / 4;
-	background-color:${Colors.primaryLighter} ;
 	
-	border-radius: 5px;
-	height: 6em;
+	p {
+		height: 6em;
+			overflow-y:hidden;
+		border-radius: 5px;
+		line-height: 1.2em;
+
+		background-color:${Colors.primaryLighter} ;
+	}
+	
 	padding: 1rem;
 	margin-bottom: 1rem;
 	position: relative;
-	overflow-y:hidden;
-	line-height: 1.2em;
 `
 
 const ActionBar = styled.div`
@@ -107,6 +111,11 @@ const Option = styled.button`
 	
 `
 
+const Chart = styled.div`
+	grid-row: 4 / span 1;
+	grid-column: 1 / 4;
+`
+
 const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
 	const [showPieChart, updateShowPieChart] = React.useState(false);
 	const [showClosedIssues, updateShowClosedIssues] = React.useState(false);
@@ -123,7 +132,16 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 				</span>
 			</Link>
 			<Title>{title}</Title>
-			<Content>{description}</Content>
+			<Content>
+				<p>
+					{description}
+				
+				</p>
+				<Chart>
+					<PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/>
+				</Chart>
+			</Content>
+			
 			
 			<ActionBar>
 				<button onClick={() => updateShowPieChart(!showPieChart)}>
