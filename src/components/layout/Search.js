@@ -12,7 +12,7 @@ const Input = styled.input`
 	border-radius: 5px;
     outline: none;
     border: none;
-  
+    font-family: 'Source Code Pro', monospace;
 `
 
 const Container = styled.div`
