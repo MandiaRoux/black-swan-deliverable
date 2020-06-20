@@ -3,7 +3,16 @@ import styled from "styled-components";
 import {Colors} from "../theme";
 import {PieChart} from "./"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRight, faChartPie, faCodeBranch, faExclamationCircle, faStar, faFilter} from '@fortawesome/free-solid-svg-icons'
+import {
+	faArrowRight,
+	faChartPie,
+	faCodeBranch,
+	faExclamationCircle,
+	faFilter,
+	faStar
+} from '@fortawesome/free-solid-svg-icons'
+import Issues from "./Issues";
+import IconRow from "./IconRow";
 
 
 const Container = styled.div`
@@ -52,54 +61,7 @@ const Content = styled.div`
 	overflow-y:hidden;
 	line-height: 1.2em;
 `
-const Issues = styled.div`
-	grid-row: 3 / span 1;
-	grid-column: 4 / 9;
-	
-	background-color: ${Colors.primaryLighter};
-	overflow-y: scroll;
-	padding: 1rem 0;
-	border-radius: 5px;
-	
-		/* width */
-	::-webkit-scrollbar {
-	  width: 7px;
-	}
-	
-	/* Track */
-	::-webkit-scrollbar-track {
-	  box-shadow: none;
-	  border-radius: 10px;
-	}
-	
-	/* Handle */
-	::-webkit-scrollbar-thumb {
-	  background: ${Colors.primaryDarker};
-	  border-radius: 10px;
-	}
-`
 
-
-const IconLabel = styled.i`
-	margin: 3px;
-    padding: .5rem;
-    
-    svg {
-    margin-right: .5rem;
-    }
-`
-
-const IconRow = styled.div`
-	display: flex;
-	position: absolute;
-	bottom:0;
-	left: 0;
-	right: 0;
-	
-    justify-content: center;
-    align-content: space-evenly;
-    width: 100%;
-`
 const ActionBar = styled.div`
 	grid-row: 2;
 	grid-column: 4 / 9;
@@ -129,26 +91,6 @@ const ActionBar = styled.div`
 	}
 `
 
-const IssueList = styled.div`
-	padding-bottom: 2rem;
-	
-
-`
-const Issue = styled.div`
-	padding:1rem;
-	
-	&:nth-child(even){
-		background-color: ${Colors.primaryDark};
-	}
-	&:last-child{
-		margin-bottom: 1rem;
-	}
-
-`
-
-const ToggleSwitch = styled.div`
-`
-
 const Option = styled.button`
 	padding: 1rem;
 	border: 1px solid ${Colors.primaryDark};
@@ -170,7 +112,7 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 	const [showClosedIssues, updateShowClosedIssues] = React.useState(false);
 	const openIssueCount = openIssuesList.total_count
 	const closedIssueCount = closedIssuesList.total_count
-
+	
 	
 	return (
 		<Container>
@@ -189,53 +131,19 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 				</button>
 				<h3>{showClosedIssues ? "Closed" : "Open"} Issues</h3>
 				
-				<ToggleSwitch>
+				<div>
 					<FontAwesomeIcon size={"1x"} icon={faFilter}/>
 					<Option onClick={() => updateShowClosedIssues(false)} disabled={!showClosedIssues}>Open</Option>
 					<Option onClick={() => updateShowClosedIssues(true)} disabled={showClosedIssues}>Closed</Option>
-				</ToggleSwitch>
+				</div>
 			</ActionBar>
 			
-			{showPieChart ? <PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/> : <Issues>
-				{showClosedIssues ?
-					<IssueList>{closedIssuesList.items.map((issue, i) => {
-						return (
-							<Issue key={i}
-							>
-								{issue.title}
-							</Issue>
-						)
-					})}
-					</IssueList>
-					:
-					<IssueList>{openIssuesList.items.map((issue, i) => {
-						return (
-							<Issue key={i}
-							>
-								{issue.title}
-							</Issue>
-						)
-					})}
-					</IssueList>
-				}
+			{showPieChart ?
+				<PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/> :
+				<Issues issueList={showClosedIssues ? closedIssuesList : openIssuesList}/>
+			}
 			
-			
-			</Issues>}
-			
-			<IconRow>
-				<IconLabel>
-					<FontAwesomeIcon icon={faCodeBranch}/>
-					{forkCount}
-				</IconLabel>
-				<IconLabel>
-					<FontAwesomeIcon icon={faStar}/>
-					{stargazerCount}
-				</IconLabel>
-				<IconLabel>
-					<FontAwesomeIcon icon={faExclamationCircle}/>
-					{openIssueCount}
-				</IconLabel>
-			</IconRow>
+			<IconRow forkCount={forkCount} stargazerCount={stargazerCount} openIssueCount={openIssueCount}/>
 		</Container>
 	)
 }

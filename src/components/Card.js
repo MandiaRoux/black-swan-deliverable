@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Colors} from "../theme";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCodeBranch, faExclamationCircle, faStar, faExpandArrowsAlt} from '@fortawesome/free-solid-svg-icons'
+import IconRow from "./IconRow";
 
 const Title = styled.h3`
 	overflow: hidden;
@@ -53,27 +54,6 @@ const Content = styled.div`
 		}
 `
 
-const IconRow = styled.div`
-	display: flex;
-	position: absolute;
-	bottom:0;
-	left: 0;
-	right: 0;
-	
-    justify-content: center;
-    align-content: space-evenly;
-    width: 100%;
-`
-
-const IconLabel = styled.i`
-	margin: 3px;
-    padding: .5rem;
-    
-    svg {
-    margin-right: .5rem;
-    }
-`
-
 const Icon = styled(FontAwesomeIcon)`
 	position: absolute;
 	top:1rem;
@@ -91,20 +71,7 @@ const Card = ({title, description, forks, stargazers, issues, expand}) => {
 			<Title>{title}</Title>
 			<Icon icon={faExpandArrowsAlt}/>
 			<Content>{description}</Content>
-			<IconRow>
-				<IconLabel>
-					<FontAwesomeIcon icon={faCodeBranch}/>
-					{forks}
-				</IconLabel>
-				<IconLabel>
-					<FontAwesomeIcon icon={faStar}/>
-					{stargazers}
-				</IconLabel>
-				<IconLabel>
-					<FontAwesomeIcon icon={faExclamationCircle}/>
-					{issues}
-				</IconLabel>
-			</IconRow>
+			<IconRow forkCount={forks} stargazerCount={stargazers} openIssueCount={issues}/>
 		</Container>
 	)
 }
