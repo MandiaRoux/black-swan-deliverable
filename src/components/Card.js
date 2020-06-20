@@ -24,9 +24,10 @@ const Container = styled.div`
 	transition: all .3s;
 	transform: translateY(0);
 	box-shadow: none;
+	
 	&:hover {
 		transform: translateY(-10px);
-		box-shadow: 1px 7px 8px ${Colors.primaryDarker};
+		box-shadow: 1px 7px 8px ${Colors.primaryDark};
 	}
 `
 
@@ -63,14 +64,7 @@ const IconRow = styled.div`
     align-content: space-evenly;
     width: 100%;
 `
-const Link = styled.div`
-	max-width: 90%;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	direction: rtl;
-    text-align: left;
-`
+
 const IconLabel = styled.i`
 	margin: 3px;
     padding: .5rem;

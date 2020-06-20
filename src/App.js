@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
-import LoadingGif from "./assets/tenor.gif";
+import Loader from "./components/Loader";
 
 const Results = styled.div`
 	background-color: ${Colors.background};
@@ -31,9 +31,6 @@ const Main = styled.div`
 	background-color: ${Colors.background};
 `
 
-const Loader = styled.img`
-
-`
 
 Modal.setAppElement('#root')
 
@@ -55,7 +52,6 @@ class App extends Component {
 	}
 	
 	search = (query) => {
-		console.log(query)
 		this.setState({isLoading: true})
 		
 		fetch('https://api.github.com/search/repositories?q=' + query)
@@ -70,7 +66,6 @@ class App extends Component {
 			.catch(error => this.setState({error, isLoading: false}));
 		;
 	}
-	
 	
 	toggleModal = () => {
 		this.setState({modalOpen: !this.state.modalOpen})
@@ -121,10 +116,10 @@ class App extends Component {
 			<Main>
 				<TopMenuBar>
 					<Title>Git Gud</Title>
-					<Search debouncedSearch={this.search}/>
+					<Search debouncedSearch={this.search} isLoading={isLoading}/>
 				</TopMenuBar>
 				<Results>
-					{!isLoading && <Loader alt={"loading"} src={LoadingGif}/>}
+					{isLoading && <Loader />}
 					{searchResults.map((repo, i) => {
 						return (
 							<Card key={i}
@@ -139,12 +134,16 @@ class App extends Component {
 					})}
 				</Results>
 				<Modal
-					isOpen={this.state.modalOpen}
+					isOpen={!this.state.modalOpen}
 					onRequestClose={this.toggleModal}
 					shouldCloseOnOverlayClick={true}
-					contentLabel="Example Modal"
+					style={{
+						content: {
+							backgroundColor: Colors.primary
+						}
+					}}
 				>
-					{modalLoading ? <p>loading</p> :
+					{modalLoading ? <Loader secondary/> :
 						<ExpandedCard
 							title={expandedRepo.name}
 							description={expandedRepo.description}

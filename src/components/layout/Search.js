@@ -19,7 +19,7 @@ const Container = styled.div`
 	text-align: center;
 `
 
-const Search = ({debouncedSearch}) => {
+const Search = ({debouncedSearch, isLoading}) => {
 	const [input, setInput] = React.useState('');
 	const [debouncedInput] = useDebounce(input, 500);
 	
@@ -38,6 +38,7 @@ const Search = ({debouncedSearch}) => {
 			<Input
 				type="text"
 				value={input}
+				disabled={isLoading}
 				placeholder="Search for a repo..."
 				onChange={({ currentTarget }) => {
 					setInput(currentTarget.value);
