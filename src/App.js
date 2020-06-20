@@ -6,16 +6,22 @@ import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
 import Loader from "./components/Loader";
-
+import HelperImage from "./assets/code_inspction.svg";
+import ToggleSwitch from "./components/Toggle";
 const Results = styled.div`
 	background-color: ${Colors.background};
 
 	margin-top: calc(${Spacing.menuHeight} + 1rem);
 	padding: 1rem;
+	text-align: center;
 	
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
-	grid-gap: 2rem;
+	grid-gap: 3rem;
+	
+	p {
+		color: ${Colors.primaryDark};
+	}
 
 `
 const Title = styled.h1`
@@ -30,7 +36,20 @@ const Main = styled.div`
 
 	background-color: ${Colors.background};
 `
-
+const Helper = styled.div`
+	padding: 3rem 1rem;
+	text-align: center;
+	color: ${Colors.primaryDark};
+	margin: 2rem;
+	
+	img {
+		position: absolute;
+		top:50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		max-height: 50vh;
+	}
+`
 
 Modal.setAppElement('#root')
 
@@ -118,8 +137,12 @@ class App extends Component {
 					<Title>Git Gud</Title>
 					<Search debouncedSearch={this.search} isLoading={isLoading}/>
 				</TopMenuBar>
+				{isLoading && <Loader />}
+				{(searchResults.length === 0 && !isLoading) && <Helper>
+					<p>Use the searchbar above to look for repositories on Github.</p>
+					<img src={HelperImage}/>
+				</Helper>}
 				<Results>
-					{isLoading && <Loader />}
 					{searchResults.map((repo, i) => {
 						return (
 							<Card key={i}
@@ -134,7 +157,7 @@ class App extends Component {
 					})}
 				</Results>
 				<Modal
-					isOpen={!this.state.modalOpen}
+					isOpen={this.state.modalOpen}
 					onRequestClose={this.toggleModal}
 					shouldCloseOnOverlayClick={true}
 					style={{

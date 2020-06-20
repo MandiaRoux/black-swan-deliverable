@@ -15,7 +15,7 @@ const Container = styled.div`
 	border-radius: 5px;
 
 	padding: 1rem;
-	position:relative;
+	position: relative;
 	
 	display: flex;
 	flex-direction: column;
@@ -32,7 +32,7 @@ const Container = styled.div`
 `
 
 const Content = styled.div`
-	height: 6em;
+	height: 8.4em;
 	padding: 1rem 0;
 	margin-bottom: 1rem;
 	position: relative;

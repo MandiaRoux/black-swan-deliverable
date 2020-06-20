@@ -3,7 +3,8 @@ import styled from "styled-components";
 import {Colors} from "../theme";
 import {PieChart} from "./"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRight, faChartPie, faCodeBranch, faExclamationCircle, faStar} from '@fortawesome/free-solid-svg-icons'
+import {faArrowRight, faChartPie, faCodeBranch, faExclamationCircle, faStar, faFilter} from '@fortawesome/free-solid-svg-icons'
+
 
 const Container = styled.div`
 	background-color: ${Colors.primary};
@@ -20,7 +21,7 @@ const Container = styled.div`
 	grid-template-columns: repeat(8, 1fr);
 	grid-column-gap: 2rem;
 `
-const Link = styled.div`
+const Link = styled.a`
 	grid-row: 1;
 	grid-column: 1 / -1;
 	max-width: 90%;
@@ -41,11 +42,11 @@ const Title = styled.h3`
 const Content = styled.div`
 	grid-row: 3 / span 1;
 	grid-column: 1 / 4;
-	background-color:whitesmoke ;
+	background-color:${Colors.primaryLighter} ;
 	
-	
+	border-radius: 5px;
 	height: 6em;
-	padding: 1rem 0;
+	padding: 1rem;
 	margin-bottom: 1rem;
 	position: relative;
 	overflow-y:hidden;
@@ -55,10 +56,27 @@ const Issues = styled.div`
 	grid-row: 3 / span 1;
 	grid-column: 4 / 9;
 	
-	background-color: ${Colors.secondary};
+	background-color: ${Colors.primaryLighter};
 	overflow-y: scroll;
-	padding: 1rem;
+	padding: 1rem 0;
 	border-radius: 5px;
+	
+		/* width */
+	::-webkit-scrollbar {
+	  width: 7px;
+	}
+	
+	/* Track */
+	::-webkit-scrollbar-track {
+	  box-shadow: none;
+	  border-radius: 10px;
+	}
+	
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+	  background: ${Colors.primaryDarker};
+	  border-radius: 10px;
+	}
 `
 
 
@@ -86,17 +104,22 @@ const ActionBar = styled.div`
 	grid-row: 2;
 	grid-column: 4 / 9;
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	color: ${Colors.textLight};
 	
 	h3 {
 		display: inline-block;
+		min-width: 150px;
 	}
 	
-	button {
+	> button {
 		background: transparent;
 		box-shadow: none;
 		outline: none;
 		border: none;
+		color: ${Colors.textLight};
 		svg {
 			cursor: pointer;
 		}
@@ -108,28 +131,50 @@ const ActionBar = styled.div`
 
 const IssueList = styled.div`
 	padding-bottom: 2rem;
+	
+
 `
 const Issue = styled.div`
-
-	&:nth-child(odd){
-		background-color: whitesmoke;
+	padding:1rem;
+	
+	&:nth-child(even){
+		background-color: ${Colors.primaryDark};
 	}
-	&:not(:last-child){
+	&:last-child{
 		margin-bottom: 1rem;
 	}
 
 `
 
+const ToggleSwitch = styled.div`
+`
+
+const Option = styled.button`
+	padding: 1rem;
+	border: 1px solid ${Colors.primaryDark};
+	font-family: 'Source Code Pro', monospace;
+	font-size: 1.6rem;
+	background: transparent;
+	box-shadow: none;
+	outline: none;
+	cursor: pointer;
+	
+	&:disabled {
+		background-color: ${Colors.primaryDark};
+	}
+	
+`
 
 const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
 	const [showPieChart, updateShowPieChart] = React.useState(false);
-	const [closedIssueFilter, updateClosedIssueFilter] = React.useState(false);
+	const [showClosedIssues, updateShowClosedIssues] = React.useState(false);
 	const openIssueCount = openIssuesList.total_count
 	const closedIssueCount = closedIssuesList.total_count
 
+	
 	return (
 		<Container>
-			<Link>
+			<Link href={url} target={"_blank"}>
 				{url}
 				<span>
 					<FontAwesomeIcon icon={faArrowRight}/>
@@ -137,18 +182,22 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 			</Link>
 			<Title>{title}</Title>
 			<Content>{description}</Content>
+			
 			<ActionBar>
 				<button onClick={() => updateShowPieChart(!showPieChart)}>
 					<FontAwesomeIcon size={"2x"} icon={faChartPie}/>
 				</button>
-				<h3>{closedIssueFilter ? "Closed" : "Open"} Issues</h3>
-				<button onClick={() => updateClosedIssueFilter(!closedIssueFilter)}>
-					Filter Toggle
-				</button>
+				<h3>{showClosedIssues ? "Closed" : "Open"} Issues</h3>
+				
+				<ToggleSwitch>
+					<FontAwesomeIcon size={"1x"} icon={faFilter}/>
+					<Option onClick={() => updateShowClosedIssues(false)} disabled={!showClosedIssues}>Open</Option>
+					<Option onClick={() => updateShowClosedIssues(true)} disabled={showClosedIssues}>Closed</Option>
+				</ToggleSwitch>
 			</ActionBar>
 			
 			{showPieChart ? <PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/> : <Issues>
-				{closedIssueFilter ?
+				{showClosedIssues ?
 					<IssueList>{closedIssuesList.items.map((issue, i) => {
 						return (
 							<Issue key={i}
