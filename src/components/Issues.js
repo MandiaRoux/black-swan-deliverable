@@ -38,6 +38,7 @@ const Issue = styled.div`
 
 `
 
+
 const Issues = ({issueList}) => {
 	return (
 		<Container>

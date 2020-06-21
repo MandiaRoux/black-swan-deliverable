@@ -114,6 +114,7 @@ const Option = styled.button`
 const Chart = styled.div`
 	grid-row: 4 / span 1;
 	grid-column: 1 / 4;
+	max-height: 25rem;
 `
 
 const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
@@ -135,16 +136,12 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 			<Content>
 				<p>
 					{description}
-				
 				</p>
-				<Chart>
-					<PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/>
-				</Chart>
 			</Content>
 			
 			
 			<ActionBar>
-				<button onClick={() => updateShowPieChart(!showPieChart)}>
+				<button disabled={(openIssueCount + closedIssueCount) === 0} onClick={() => updateShowPieChart(!showPieChart)}>
 					<FontAwesomeIcon size={"2x"} icon={faChartPie}/>
 				</button>
 				<h3>{showClosedIssues ? "Closed" : "Open"} Issues</h3>
