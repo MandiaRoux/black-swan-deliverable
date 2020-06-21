@@ -29,6 +29,14 @@ const Container = styled.div`
 	grid-template-rows: 5rem 5rem 1fr 5rem;
 	grid-template-columns: repeat(8, 1fr);
 	grid-column-gap: 2rem;
+	
+	@media (max-width: 425px){
+		display: flex;
+		flex-direction:column ;
+		height: 100vh;
+		overflow: scroll;
+	}
+	
 `
 const Link = styled.a`
 	grid-row: 1;
@@ -46,6 +54,10 @@ const Link = styled.a`
     
     &:hover {
     	color:${Colors.primaryDarker};
+    }
+    
+    @media(max-width: 425px){
+    	overflow: visible;
     }
 `
 const Title = styled.h2`
@@ -100,6 +112,11 @@ const ActionBar = styled.div`
 			transform: translateY(-5px);
 		}
 	}
+	@media (max-width: 425px){
+		display: flex;
+		flex-direction:column ;
+	}
+
 `
 
 const Toggle = styled.div`

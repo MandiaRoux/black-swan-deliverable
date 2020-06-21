@@ -34,6 +34,16 @@ const Main = styled.div`
 	color: ${Colors.textLight};
 
 	background-color: ${Colors.background};
+	
+	.modal {
+		@media(max-width: 425px){
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+	}
 `
 
 
@@ -143,6 +153,7 @@ class App extends Component {
 					isOpen={this.state.modalOpen}
 					onRequestClose={this.toggleModal}
 					shouldCloseOnOverlayClick={true}
+					className={"modal"}
 					style={{
 						content: {
 							backgroundColor: Colors.primary

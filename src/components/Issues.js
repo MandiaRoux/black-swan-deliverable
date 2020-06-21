@@ -24,6 +24,10 @@ const Container = styled.div`
 	  background: ${Colors.primaryDarker};
 	  border-radius: 10px;
 	}
+	
+	@media (max-width: 425px){
+		overflow-y: visible;
+	}
 `
 
 const Issue = styled.div`
@@ -35,7 +39,11 @@ const Issue = styled.div`
 	&:last-child{
 		margin-bottom: 1rem;
 	}
-
+	@media (max-width: 425px){
+		white-space: normal;
+		text-overflow: ellipsis;
+		overflow-x: hidden;
+	}
 `
 
 
