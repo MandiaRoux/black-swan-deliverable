@@ -153,7 +153,7 @@ class App extends Component {
 						<ExpandedCard
 							title={expandedRepo.name}
 							description={expandedRepo.description}
-							url={expandedRepo.url}
+							url={expandedRepo.html_url}
 							forkCount={expandedRepo.forks_count}
 							stargazerCount={expandedRepo.stargazers_count}
 							issueCount={expandedRepo.open_issues_count}

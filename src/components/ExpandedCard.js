@@ -33,17 +33,22 @@ const Container = styled.div`
 const Link = styled.a`
 	grid-row: 1;
 	grid-column: 1 / -1;
-	max-width: 90%;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
     text-align: center;
+    color:${Colors.primaryLighter};
+    cursor: pointer;
     
     span {
     	margin-left:1rem;
     }
+    
+    &:hover {
+    	color:${Colors.primaryDarker};
+    }
 `
-const Title = styled.h3`
+const Title = styled.h2`
 	grid-row: 2;
 	grid-column: 1 / 4;
 	color: ${Colors.textLight};
@@ -53,15 +58,13 @@ const Content = styled.div`
 	grid-column: 1 / 4;
 	
 	p {
-		height: 6em;
-			overflow-y:hidden;
+		min-height: 6em;
+		overflow-y:hidden;
 		border-radius: 5px;
-		line-height: 1.2em;
-
+		padding: 1rem;
 		background-color:${Colors.primaryLighter} ;
 	}
 	
-	padding: 1rem;
 	margin-bottom: 1rem;
 	position: relative;
 `
@@ -86,36 +89,51 @@ const ActionBar = styled.div`
 		outline: none;
 		border: none;
 		color: ${Colors.textLight};
+		transform: translateY(0);
+		transition: transform .3s;
+		
 		svg {
 			cursor: pointer;
 		}
+	
 		&:hover {
-			color:orange;
+			transform: translateY(-5px);
 		}
 	}
 `
 
-const Option = styled.button`
-	padding: 1rem;
-	border: 1px solid ${Colors.primaryDark};
-	font-family: 'Source Code Pro', monospace;
-	font-size: 1.6rem;
-	background: transparent;
-	box-shadow: none;
-	outline: none;
-	cursor: pointer;
-	
-	&:disabled {
-		background-color: ${Colors.primaryDark};
+const Toggle = styled.div`
+	svg {
+		margin-right: 1rem;
 	}
+	button {
+		padding: 1rem;
+		border: 1px solid ${Colors.primaryDark};
+		font-family: 'Source Code Pro', monospace;
+		font-size: 1.6rem;
+		background: transparent;
+		box-shadow: none;
+		outline: none;
+		cursor: pointer;
+		color: ${Colors.textLight};
+
+
+		&:disabled {
+			background-color: ${Colors.primaryDark};
+		}
+		&:nth-child(2) {
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
+		&:nth-child(3) {
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+		}
+	}
+	
 	
 `
 
-const Chart = styled.div`
-	grid-row: 4 / span 1;
-	grid-column: 1 / 4;
-	max-height: 25rem;
-`
 
 const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
 	const [showPieChart, updateShowPieChart] = React.useState(false);
@@ -146,11 +164,11 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 				</button>
 				<h3>{showClosedIssues ? "Closed" : "Open"} Issues</h3>
 				
-				<div>
+				<Toggle>
 					<FontAwesomeIcon size={"1x"} icon={faFilter}/>
-					<Option onClick={() => updateShowClosedIssues(false)} disabled={!showClosedIssues}>Open</Option>
-					<Option onClick={() => updateShowClosedIssues(true)} disabled={showClosedIssues}>Closed</Option>
-				</div>
+					<button onClick={() => updateShowClosedIssues(false)} disabled={!showClosedIssues}>Open</button>
+					<button onClick={() => updateShowClosedIssues(true)} disabled={showClosedIssues}>Closed</button>
+				</Toggle>
 			</ActionBar>
 			
 			{showPieChart ?

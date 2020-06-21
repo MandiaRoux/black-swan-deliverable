@@ -11,7 +11,8 @@ export const Colors = {
 	secondary: "#929696",
 	tertiary: "#B84422",
 	background: "#F9F9F7",
-	textLight: "#F9F9F7",
+	textLight: "#f9f9f7",
+	textMed: "#d0d0d0",
 	white: "#f7f9f9"
 }
 
