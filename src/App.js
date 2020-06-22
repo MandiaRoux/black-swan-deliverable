@@ -180,9 +180,7 @@ class App extends Component {
 	
 	render() {
 		const {searchResults, isLoading, error, expandedRepo, modalLoading, openIssuesList, closedIssuesList, issuesLoading, paginationLinks} = this.state
-		if (error) {
-			return <p>{error.message}</p>;
-		}
+		
 		return (
 			<Main>
 				<TopMenuBar>
@@ -191,47 +189,50 @@ class App extends Component {
 				</TopMenuBar>
 				{isLoading && <Loader/>}
 				{(searchResults.length === 0 && !isLoading) && <Helper/>}
-				<Results>
-					{searchResults.map((repo, i) => {
-						return (
-							<Card key={i}
-								  title={repo.name}
-								  description={repo.description}
-								  url={repo.url}
-								  forks={repo.forks_count}
-								  stargazers={repo.stargazers_count}
-								  issues={repo.open_issues_count}
-								  expand={() => this.expandRepo(repo.full_name)}/>
-						)
-					})}
-				</Results>
-				<Modal
-					isOpen={this.state.modalOpen}
-					onRequestClose={this.toggleModal}
-					shouldCloseOnOverlayClick={true}
-					style={{
-						content: {
-							backgroundColor: Colors.primary
+				{error ? <Helper error/> : <React.Fragment>
+					<Results>
+						{searchResults.map((repo, i) => {
+							return (
+								<Card key={i}
+									  title={repo.name}
+									  description={repo.description}
+									  url={repo.url}
+									  forks={repo.forks_count}
+									  stargazers={repo.stargazers_count}
+									  issues={repo.open_issues_count}
+									  expand={() => this.expandRepo(repo.full_name)}/>
+							)
+						})}
+					</Results>
+					<Modal
+						isOpen={this.state.modalOpen}
+						onRequestClose={this.toggleModal}
+						shouldCloseOnOverlayClick={true}
+						style={{
+							content: {
+								backgroundColor: Colors.primary
+							}
+						}}
+					>
+						{modalLoading ? <Loader secondary/> :
+							<ExpandedCard
+								title={expandedRepo.name}
+								description={expandedRepo.description}
+								url={expandedRepo.html_url}
+								forkCount={expandedRepo.forks_count}
+								stargazerCount={expandedRepo.stargazers_count}
+								issueCount={expandedRepo.open_issues_count}
+								openIssuesList={openIssuesList}
+								closedIssuesList={closedIssuesList}
+								loadMoreClosedIssues={this.handlePagination}
+								paginationLinks={paginationLinks}
+								issuesLoading={issuesLoading}
+							/>
 						}
-					}}
-				>
-					{modalLoading ? <Loader secondary/> :
-						<ExpandedCard
-							title={expandedRepo.name}
-							description={expandedRepo.description}
-							url={expandedRepo.html_url}
-							forkCount={expandedRepo.forks_count}
-							stargazerCount={expandedRepo.stargazers_count}
-							issueCount={expandedRepo.open_issues_count}
-							openIssuesList={openIssuesList}
-							closedIssuesList={closedIssuesList}
-							loadMoreClosedIssues={this.handlePagination}
-							paginationLinks={paginationLinks}
-							issuesLoading={issuesLoading}
-						/>
-					}
-				
-				</Modal>
+					
+					</Modal>
+				</React.Fragment>}
+			
 			</Main>
 		);
 	}

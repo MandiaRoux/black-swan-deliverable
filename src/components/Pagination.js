@@ -19,7 +19,12 @@ const Paginator = styled.div`
 		outline: none;
 		border: none;
 		margin: 0 1rem;
+		cursor: pointer;
 		color: ${Colors.textLight};
+		
+		&:hover:not(:disabled) {
+			color: ${Colors.textMed};
+		}
 		
 		&:disabled {
 			opacity: .5;

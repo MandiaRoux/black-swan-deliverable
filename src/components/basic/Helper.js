@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import {Colors} from "../../theme";
-import HelperImage from "../../assets/code_inspction.svg";
+import HelperImage from "../../assets/code_inspection.svg";
+import HelperErrorImage from "../../assets/404.png";
 
 const Container = styled.div`
 	padding: 3rem 1rem;
@@ -18,11 +19,19 @@ const Container = styled.div`
 	}
 `
 
-const Helper = () => {
+const Helper = ({error}) => {
 	return (
 		<Container>
-			<p>Use the searchbar above to look for repositories on Github.</p>
-			<img alt={"a helpful image"} src={HelperImage}/>
+			{error ?
+				<div>
+					<p>Something went wrong! You probably exceeded your rate limit.</p>
+					<img alt={"404 image"} src={HelperErrorImage}/>
+				</div> :
+				<div>
+					<p>Use the searchbar above to look for repositories on Github.</p>
+					<img alt={"a helpful image"} src={HelperImage}/>
+				</div>
+			}
 		</Container>
 	)
 }

@@ -8,6 +8,7 @@ const Container = styled.div`
 	
 	background-color: ${Colors.primaryLighter};
 	overflow-y: scroll;
+	overflow-x: hidden;
 	border-radius: 5px;
 	
 	position:relative;
@@ -18,11 +19,12 @@ const Container = styled.div`
 	
 	::-webkit-scrollbar-track {
 	  box-shadow: none;
+	  background: ${Colors.primaryLight};
 	  border-radius: 10px;
 	}
 	
 	::-webkit-scrollbar-thumb {
-	  background: ${Colors.primaryDarker};
+	  background: ${Colors.primaryDark};
 	  border-radius: 10px;
 	}
 	
@@ -63,7 +65,8 @@ const Issues = ({issueList, isLoading, loadMoreClosedIssues, paginationLinks}) =
 						</Issue>
 					)
 				})}
-				<Pagination handlePagination={loadMoreClosedIssues} paginationLinks={paginationLinks}/>
+			{paginationLinks && <Pagination handlePagination={loadMoreClosedIssues} paginationLinks={paginationLinks}/>}
+			
 		</Container>
 	)
 }
