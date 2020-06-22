@@ -3,17 +3,9 @@ import styled from "styled-components";
 import {Colors} from "../theme";
 import {PieChart} from "./"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {
-	faArrowRight,
-	faChartPie,
-	faCodeBranch,
-	faExclamationCircle,
-	faFilter,
-	faStar
-} from '@fortawesome/free-solid-svg-icons'
+import {faArrowRight, faChartPie, faFilter} from '@fortawesome/free-solid-svg-icons'
 import Issues from "./Issues";
 import IconRow from "./IconRow";
-
 
 const Container = styled.div`
 	background-color: ${Colors.primary};
@@ -152,9 +144,11 @@ const Toggle = styled.div`
 `
 
 
-const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList}) => {
+const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList, loadMoreClosedIssues, issuesLoading, paginationLinks}) => {
+	
 	const [showPieChart, updateShowPieChart] = React.useState(false);
 	const [showClosedIssues, updateShowClosedIssues] = React.useState(false);
+	
 	const openIssueCount = openIssuesList.total_count
 	const closedIssueCount = closedIssuesList.total_count
 	
@@ -176,7 +170,8 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 			
 			
 			<ActionBar>
-				<button disabled={(openIssueCount + closedIssueCount) === 0} onClick={() => updateShowPieChart(!showPieChart)}>
+				<button disabled={(openIssueCount + closedIssueCount) === 0}
+						onClick={() => updateShowPieChart(!showPieChart)}>
 					<FontAwesomeIcon size={"2x"} icon={faChartPie}/>
 				</button>
 				<h3>{showClosedIssues ? "Closed" : "Open"} Issues</h3>
@@ -187,11 +182,13 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 					<button onClick={() => updateShowClosedIssues(true)} disabled={showClosedIssues}>Closed</button>
 				</Toggle>
 			</ActionBar>
-			
 			{showPieChart ?
 				<PieChart openIssueCount={openIssueCount} closedIssueCount={closedIssueCount}/> :
-				<Issues issueList={showClosedIssues ? closedIssuesList : openIssuesList}/>
+				<Issues issueList={showClosedIssues ? closedIssuesList : openIssuesList}
+						paginationLinks={showClosedIssues ? paginationLinks.closedIssuesPaginationLinks : paginationLinks.openIssuesPaginationLinks}
+						isLoading={issuesLoading} loadMoreClosedIssues={loadMoreClosedIssues}/>
 			}
+			
 			
 			<IconRow forkCount={forkCount} stargazerCount={stargazerCount} openIssueCount={openIssueCount}/>
 		</Container>

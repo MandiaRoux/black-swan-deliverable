@@ -1,11 +1,13 @@
 import './App.css';
 import styled from "styled-components";
-import {Card, ExpandedCard, TopMenuBar, Helper} from "./components"
+import {Card, ExpandedCard, Helper, TopMenuBar} from "./components"
 import React, {Component} from 'react';
 import {Colors, Spacing} from "./theme";
 import Search from "./components/layout/Search";
 import Modal from 'react-modal';
 import Loader from "./components/basic/Loader";
+
+const parse = require('parse-link-header');
 
 const Results = styled.div`
 	background-color: ${Colors.background};
@@ -34,16 +36,6 @@ const Main = styled.div`
 	color: ${Colors.textLight};
 
 	background-color: ${Colors.background};
-	
-	.modal {
-		@media(max-width: 425px){
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-		}
-	}
 `
 
 
@@ -61,10 +53,16 @@ class App extends Component {
 			modalLoading: false,
 			expandedRepo: {},
 			openIssuesList: {},
-			closedIssuesList:{},
-			totalIssuesCount:0
+			closedIssuesList: {},
+			paginationLinks: {
+				openIssuesPaginationLinks: {},
+				closedIssuesPaginationLinks: {}
+			},
+			issuesLoading: false,
+			totalIssuesCount: 0
 		};
 	}
+	
 	
 	search = (query) => {
 		this.setState({isLoading: true})
@@ -87,9 +85,11 @@ class App extends Component {
 	}
 	
 	expandRepo = (query) => {
-		this.setState({modalOpen: true, modalLoading: true, closedTicketsLoading:true})
+		this.setState({modalOpen: true, modalLoading: true})
 		//The expanded view of a repo requires two different API calls - one for the additional info of the repo itself and one for the issue list of that repo.
 		// For performance reasons this is processed through a singular state change
+		let headerLinks = {};
+		
 		Promise.all([
 			fetch('https://api.github.com/repos/' + query),
 			fetch('https://api.github.com/search/issues?q=repo:' + query + '+type:issue+state:open'),
@@ -97,33 +97,89 @@ class App extends Component {
 			// map responses into an array of response.json() to read their content
 			.then(responses =>
 				Promise.all(
-					responses.map(response =>
-						response.json()
+					responses.map(response => {
+							headerLinks = parse(response.headers.get('link'));
+							return response.json()
+						}
 					)
 				)
 			)
 			.then(data => this.setState(
-					{
+				{
 					expandedRepo: data[0],
-					openIssuesList:data[1],
-					modalLoading: false
+					openIssuesList: data[1],
+					modalLoading: false,
+					paginationLinks: {
+						...this.state.paginationLinks,
+						openIssuesPaginationLinks: headerLinks,
+					}
 				}
 			));
 		
 		fetch('https://api.github.com/search/issues?q=repo:' + query + '+type:issue+state:closed')
 			.then(response => {
 				if (response.ok) {
+					const parsedHeaders = parse(response.headers.get('link'))
+					this.setState({
+						paginationLinks: {
+							...this.state.paginationLinks,
+							closedIssuesPaginationLinks: parsedHeaders
+						}
+					})
 					return response.json();
 				} else {
 					throw new Error('Something went wrong ...');
 				}
 			})
-				.then(data => this.setState({closedIssuesList:data}))
-				.catch(error => this.setState({error, closedTicketsLoading: false}));
+			.then(data =>
+				this.setState({closedIssuesList: data, issuesLoading: false})
+			)
+			.catch(error => this.setState({error, issuesLoading: false}));
 	}
 	
+	handlePagination = (linkHeader) => {
+		this.setState({issuesLoading: true});
+		
+		const {q: query, url} = linkHeader
+		const paginatingClosedIssues = query.includes("state:closed")
+		let newHeaders = {};
+		
+		fetch(linkHeader.url)
+			.then(response => {
+				if (response.ok) {
+					newHeaders = parse(response.headers.get('link'))
+					return response.json();
+				} else {
+					throw new Error('Something went wrong ...');
+				}
+			})
+			.then(data => {
+					if (paginatingClosedIssues) {
+						this.setState({
+							closedIssuesList: data, issuesLoading: false, paginationLinks: {
+								...this.state.paginationLinks,
+								closedIssuesPaginationLinks: newHeaders
+							}
+						})
+						
+					} else {
+						this.setState({
+							openIssuesList: data, issuesLoading: false, paginationLinks: {
+								...this.state.paginationLinks,
+								openIssuesPaginationLinks: newHeaders
+							}
+						})
+						
+					}
+					
+				}
+			)
+			.catch(error => this.setState({error, issuesLoading: false}));
+	}
+	
+	
 	render() {
-		const {searchResults, isLoading, error, expandedRepo, modalLoading, openIssuesList, closedIssuesList} = this.state
+		const {searchResults, isLoading, error, expandedRepo, modalLoading, openIssuesList, closedIssuesList, issuesLoading, paginationLinks} = this.state
 		if (error) {
 			return <p>{error.message}</p>;
 		}
@@ -133,7 +189,7 @@ class App extends Component {
 					<Title>Git Gud</Title>
 					<Search debouncedSearch={this.search} isLoading={isLoading}/>
 				</TopMenuBar>
-				{isLoading && <Loader />}
+				{isLoading && <Loader/>}
 				{(searchResults.length === 0 && !isLoading) && <Helper/>}
 				<Results>
 					{searchResults.map((repo, i) => {
@@ -153,7 +209,6 @@ class App extends Component {
 					isOpen={this.state.modalOpen}
 					onRequestClose={this.toggleModal}
 					shouldCloseOnOverlayClick={true}
-					className={"modal"}
 					style={{
 						content: {
 							backgroundColor: Colors.primary
@@ -170,7 +225,9 @@ class App extends Component {
 							issueCount={expandedRepo.open_issues_count}
 							openIssuesList={openIssuesList}
 							closedIssuesList={closedIssuesList}
-							openIssuesCount={expandedRepo.open_issues_count}
+							loadMoreClosedIssues={this.handlePagination}
+							paginationLinks={paginationLinks}
+							issuesLoading={issuesLoading}
 						/>
 					}
 				
