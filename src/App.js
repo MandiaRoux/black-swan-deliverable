@@ -202,7 +202,7 @@ class App extends Component {
           <Search debouncedSearch={this.searchRepositories} isLoading={isLoading} />
         </TopMenuBar>
 
-        {searchResults.length === 0 && !isLoading && <Helper />}
+        {searchResults.length === 0 && !isLoading && !error && <Helper />}
 
         {isLoading && <Loader />}
 
