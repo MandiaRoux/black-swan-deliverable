@@ -55,13 +55,18 @@ const Link = styled.a`
   }
 
   @media (max-width: 425px) {
-    overflow: visible;
+    margin: 1rem 0;
+    min-height: 2rem;
   }
 `
 const Title = styled.h2`
   grid-row: 2;
   grid-column: 1 / 4;
   color: ${Colors.textLight};
+
+  @media (max-width: 425px) {
+    padding: 1rem 0;
+  }
 `
 const Content = styled.div`
   grid-row: 3 / span 1;
@@ -107,7 +112,8 @@ const ActionBar = styled.div`
   }
   @media (max-width: 425px) {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin-top: 2rem;
   }
 `
 const Toggle = styled.div`
@@ -152,6 +158,11 @@ const CloseModalButton = styled.button`
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  @media (max-width: 425px) {
+    width: 100%;
+    text-align: right;
   }
 `
 

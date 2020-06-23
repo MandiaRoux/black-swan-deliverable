@@ -14,6 +14,10 @@ const Container = styled.div`
   justify-content: center;
   align-content: space-evenly;
   width: 100%;
+
+  @media (max-width: 425px) {
+    position: initial;
+  }
 `
 const IconLabel = styled.i`
   margin: 3px;

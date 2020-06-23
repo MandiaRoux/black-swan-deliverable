@@ -32,7 +32,7 @@ const Container = styled.div`
   opacity: ${(props) => (props.isLoading ? 0.5 : 1)};
 
   @media (max-width: 425px) {
-    overflow-y: visible;
+    overflow: visible;
   }
 `
 

@@ -35,6 +35,10 @@ const Paginator = styled.div`
       opacity: 0.5;
     }
   }
+
+  @media (max-width: 425px) {
+    position: initial;
+  }
 `
 const Pagination = ({ handlePagination, paginationLinks }) => {
   const nextLink = paginationLinks.next

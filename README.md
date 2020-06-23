@@ -1,3 +1,10 @@
+###Black Swan Data Assignment
+
+Hello! Thank you for taking the time to review this assignment. 
+There are a few things I'd like to mention regarding design choices made during the building of 
+this app:
+-
+
 ### Live URL: https://black-swan-6b3ea.web.app
 
 ### Getting Started

@@ -16,6 +16,7 @@ const Container = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     max-height: 50vh;
+    max-width: 90vw;
   }
 `
 

@@ -230,11 +230,8 @@ class App extends Component {
               isOpen={this.state.modalOpen}
               onRequestClose={this.toggleModal}
               shouldCloseOnOverlayClick={true}
-              style={{
-                content: {
-                  backgroundColor: Colors.primary,
-                },
-              }}
+              className="Modal"
+              overlayClassName="Overlay"
             >
               {modalLoading ? (
                 <Loader secondary />
