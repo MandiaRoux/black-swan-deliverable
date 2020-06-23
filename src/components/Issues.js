@@ -56,9 +56,13 @@ const Issue = styled.div`
 const Issues = ({ issueList, isLoading, loadMoreClosedIssues, paginationLinks }) => {
   return (
     <Container isLoading={isLoading}>
-      {issueList.items.map((issue, i) => {
-        return <Issue key={i}>{issue.title}</Issue>
-      })}
+      {issueList && (
+        <React.Fragment>
+          {issueList.items.map((issue, i) => {
+            return <Issue key={i}>{issue.title}</Issue>
+          })}
+        </React.Fragment>
+      )}
       {paginationLinks && (
         <Pagination handlePagination={loadMoreClosedIssues} paginationLinks={paginationLinks} />
       )}

@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { Colors } from "../theme"
 import { PieChart } from "./"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faChartPie, faFilter } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faChartPie, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons"
 import Issues from "./Issues"
 import IconRow from "./basic/IconRow"
 
@@ -22,6 +22,13 @@ const Container = styled.div`
   grid-template-columns: repeat(8, 1fr);
   grid-column-gap: 2rem;
 
+  button {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    border: none;
+  }
+
   @media (max-width: 425px) {
     display: flex;
     flex-direction: column;
@@ -31,7 +38,7 @@ const Container = styled.div`
 `
 const Link = styled.a`
   grid-row: 1;
-  grid-column: 1 / -1;
+  grid-column: 1 / 8;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -86,10 +93,6 @@ const ActionBar = styled.div`
   }
 
   > button {
-    background: transparent;
-    box-shadow: none;
-    outline: none;
-    border: none;
     color: ${Colors.textLight};
     transform: translateY(0);
     transition: transform 0.3s;
@@ -116,9 +119,6 @@ const Toggle = styled.div`
     border: 1px solid ${Colors.primaryDark};
     font-family: "Source Code Pro", monospace;
     font-size: 1.6rem;
-    background: transparent;
-    box-shadow: none;
-    outline: none;
     cursor: pointer;
     color: ${Colors.textLight};
 
@@ -136,9 +136,29 @@ const Toggle = styled.div`
   }
 `
 
+const CloseModalButton = styled.button`
+  grid-row: 1;
+  grid-column: 8 / 9;
+  justify-self: flex-end;
+  align-self: start;
+  color: ${Colors.textLight};
+
+  transform: translateY(0);
+  transition: transform 0.3s;
+
+  svg {
+    cursor: pointer;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+`
+
 const ExpandedCard = ({
   title,
   description,
+  closeModal,
   url,
   forkCount,
   stargazerCount,
@@ -157,6 +177,11 @@ const ExpandedCard = ({
 
   return (
     <Container>
+      <CloseModalButton onClick={closeModal}>
+        <span>
+          <FontAwesomeIcon size={"2x"} icon={faTimes} />
+        </span>
+      </CloseModalButton>
       <Link href={url} target={"_blank"}>
         {url}
         <span>

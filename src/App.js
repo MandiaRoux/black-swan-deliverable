@@ -73,7 +73,7 @@ class App extends Component {
   }
 
   searchRepositories = (query) => {
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true, searchResults: [] })
 
     fetch("https://api.github.com/search/repositories?q=" + query)
       .then((response) => {
@@ -241,6 +241,7 @@ class App extends Component {
               ) : (
                 <ExpandedCard
                   title={expandedRepo.name}
+                  closeModal={this.toggleModal}
                   description={expandedRepo.description}
                   url={expandedRepo.html_url}
                   forkCount={expandedRepo.forks_count}
