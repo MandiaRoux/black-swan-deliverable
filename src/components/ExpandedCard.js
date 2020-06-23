@@ -144,7 +144,7 @@ const Toggle = styled.div`
 `
 
 
-const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openIssuesList, closedIssuesList, loadMoreClosedIssues, issuesLoading, paginationLinks}) => {
+const ExpandedCard = ({title, description, url, forkCount, stargazerCount, issueCount, openIssuesList, closedIssuesList, loadMoreClosedIssues, issuesLoading, paginationLinks}) => {
 	
 	const [showPieChart, updateShowPieChart] = React.useState(false);
 	const [showClosedIssues, updateShowClosedIssues] = React.useState(false);
@@ -190,7 +190,7 @@ const ExpandedCard = ({title, description, url, forkCount, stargazerCount, openI
 			}
 			
 			
-			<IconRow forkCount={forkCount} stargazerCount={stargazerCount} openIssueCount={openIssueCount}/>
+			<IconRow forkCount={forkCount} stargazerCount={stargazerCount} issueCount={issueCount}/>
 		</Container>
 	)
 }

@@ -71,7 +71,7 @@ const Card = ({title, description, forks, stargazers, issues, expand}) => {
 			<Title>{title}</Title>
 			<Icon icon={faExpandArrowsAlt}/>
 			<Content>{description}</Content>
-			<IconRow forkCount={forks} stargazerCount={stargazers} openIssueCount={issues}/>
+			<IconRow forkCount={forks} stargazerCount={stargazers} issueCount={issues}/>
 		</Container>
 	)
 }

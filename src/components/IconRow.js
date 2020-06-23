@@ -27,7 +27,7 @@ const IconLabel = styled.i`
 
 
 
-const IconRow = ({forkCount, stargazerCount, openIssueCount}) => {
+const IconRow = ({forkCount, stargazerCount, issueCount}) => {
 	return (
 		<Container>
 			<IconLabel>
@@ -40,7 +40,7 @@ const IconRow = ({forkCount, stargazerCount, openIssueCount}) => {
 			</IconLabel>
 			<IconLabel>
 				<FontAwesomeIcon icon={faExclamationCircle}/>
-				{openIssueCount}
+				{issueCount}
 			</IconLabel>
 		</Container>
 	)
